@@ -1,10 +1,14 @@
 \documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{pdflscape}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
@@ -188,12 +192,15 @@ Classical dose--response models provide the standard mathematical link between p
 
 This section develops the bridge from classical formulations to mechanistic interpretation. The main point is not that classical models should be discarded, but that they can be understood as reduced descriptions of underlying stochastic and dynamical processes. This interpretation clarifies both their utility and their limitations, and motivates a mechanistic framework in which dose--response relationships emerge from exposure survival, pathogen establishment, within-host expansion, and host-mediated clearance.
 
-\begin{table*}[htbp]
+\begin{landscape}
+\begin{table}[p]
 \centering
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.18}
 \caption{From classical dose--response models to mechanistic interpretation. Classical models provide tractable exposure--risk functions, whereas mechanistic models interpret infection probability as an emergent property of biological processes.}
 \label{tab:classical_mechanistic_bridge}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{3.2cm} p{3.2cm} p{3.8cm} p{3.5cm} p{3.5cm} p{4.2cm}}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
 \toprule
 \textbf{Modeling perspective} &
 \textbf{Mathematical structure} &
@@ -253,9 +260,9 @@ Computationally demanding; requires careful validation and biological constraint
 \cite{Capone2022QMRAEffectMeasures,Handel2015CrossingScale,Mideo2008WithinHost} \\
 
 \bottomrule
-\end{tabular}
-}
-\end{table*}
+\end{tabularx}
+\end{table}
+\end{landscape}
 
 \subsection{Classical formulations and their assumptions}
 
@@ -419,12 +426,15 @@ Equation~\eqref{eq:unified_framework} generalizes the trajectory-based formulati
 Equation~\eqref{eq:unified_framework} provides a common mathematical structure within which diverse dose--response models can be interpreted as alternative representations of the same underlying process as illustrated in Figure~\ref{fig:unified_mechanistic_framework}.
 
 
-\begin{table*}[ht]
+\begin{landscape}
+\begin{table}[p]
 \centering
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.18}
 \caption{Mechanistic framework for dose--response modeling. Dose--response curves emerge from within-host dynamics, outcome definitions, and population-level aggregation under biological variability.}
 \label{tab:mechanistic_framework_generation}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{3.2cm} p{3.5cm} p{3.6cm} p{3.5cm} p{4.2cm}}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
 \toprule
 \textbf{Component} &
 \textbf{Mathematical structure} &
@@ -474,9 +484,9 @@ Produces population-level dose--response curve &
 %\cite{Gutting2013,Raue2009StructuralIdentifiability,Preston2025Identifiability} \\
 
 \bottomrule
-\end{tabular}
-}
-\end{table*}
+\end{tabularx}
+\end{table}
+\end{landscape}
 
 \subsection{The Exposure-to-Outcome Mapping}
 
@@ -1213,7 +1223,7 @@ using $N=300$ virtual hosts per dose and $M=100$ repeated Monte Carlo realizatio
 
 
 
-The simulations used 12 logarithmically spaced doses and independent lognormal draws of $\eta$ and $\phi$ for each virtual host in each repetition. A NumPy pseudorandom seed of 123 was set at the beginning of the computation. The coupled ordinary differential equations were integrated with SciPy's \texttt{solve\_ivp} using the explicit RK45 solver, relative tolerance $10^{-6}$ and absolute tolerance $10^{-9}$. Each trajectory was evaluated at 400 equally spaced times over $[0,30]$; the recorded maximum over those sampled times determined the threshold-crossing indicator. Therefore, the implemented outcome is a sampled-time approximation to the continuous-time maximum in Eq.~\eqref{eq:estimated_dose_response}. A crossing that occurs and reverses between output times could be missed; continuous event detection would remove this numerical limitation. Solver success was not explicitly checked in the original scripts, so reproducibility should include a solver-success check before publication.
+The simulations used 12 logarithmically spaced doses and independent lognormal draws of $\eta$ and $\phi$ for each virtual host in each repetition. A NumPy pseudorandom seed of 123 was set at the beginning of the computation. The coupled ordinary differential equations were integrated with SciPy's \texttt{solve\_ivp} using the explicit RK45 solver, relative tolerance $10^{-6}$ and absolute tolerance $10^{-9}$. Each trajectory was evaluated at 400 equally spaced times over $[0,30]$; the recorded maximum over those sampled times determined the threshold-crossing indicator. Therefore, the implemented outcome is a sampled-time approximation to the continuous-time maximum in Eq.~\eqref{eq:estimated_dose_response}. A crossing that occurs and reverses between output times could be missed; continuous event detection would remove this numerical limitation. The original generation scripts did not explicitly check the solver success flag for every integration. A subsequent independent time-grid sensitivity audit checked 120 trajectories (the first 10 virtual hosts at each of the 12 doses from the first Monte Carlo repetition): all 120 integrations succeeded, and no threshold-crossing classifications changed between 400 and 1600 sampled output times. The largest relative difference in sampled peak burden was $2.77\times10^{-5}$. These results support the chosen time grid for the audited subset, but do not establish solver success or time-grid convergence for all Monte Carlo trajectories; the original simulation scripts and audit code are provided in the public repository.
 
 Repeated Monte Carlo realizations were used to characterize finite-sample variability in
 the estimated population-level infection probability under the specified distributions
@@ -1262,7 +1272,7 @@ distributions of host-specific survival and immune-response
 parameters.
 
 
-The displayed trajectories are the first four sampled hosts at each of three selected doses from the first Monte Carlo repetition, rather than averages or typical quantiles. The corresponding within-host trajectories are shown in
+The displayed trajectories are the first four sampled hosts at each of three selected doses from the first Monte Carlo repetition. They are illustrative individual realizations, not population-representative selections, averages, or quantiles. The corresponding within-host trajectories are shown in
 Figure~\ref{fig:trajectory_examples}. At low exposure doses,
 trajectories generally remain below the operational threshold
 during the observation period. Intermediate doses produce
@@ -1276,9 +1286,9 @@ threshold and reach elevated pathogen burdens.
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.78\textwidth]{trajectory_examples.png}
-\caption{Representative within-host pathogen trajectories
+\caption{Illustrative within-host pathogen trajectories
 generated by the mechanistic model across illustrative
-exposure doses ($D=1$, $D\approx 2.3\times 10^4$, and $D=10^8$). Four trajectories are shown per dose from the first Monte Carlo repetition. The dashed horizontal line denotes the
+exposure doses ($D=1$, $D\approx 2.3\times 10^4$, and $D=10^8$). The first four sampled host trajectories are shown per dose from the first Monte Carlo repetition; they were not selected to represent population quantiles or typical behavior. The dashed horizontal line denotes the
 operational threshold $P_c=\rho K$. At low doses,
 trajectories generally remain below this threshold during
 the observation period, whereas higher doses more
